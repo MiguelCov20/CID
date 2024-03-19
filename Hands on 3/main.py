@@ -1,4 +1,5 @@
 from batch import Batch
+import math
 
 def transpose_matrix(matrix):
     # Obtener las dimensiones de la matriz original
@@ -62,6 +63,16 @@ def inverse_matrix(matrix):
     
     return inverse_matrix
 
+def getDetermination(mat_y, y_predicted):
+    mean_y = sum(mat_y) / len(mat_y)
+
+    ss_regresion = sum((y_pred - mean_y) ** 2 for y_pred in y_predicted)
+    ss_error = sum((element_y - y_pred) ** 2 for element_y, y_pred in zip(mat_y, y_predicted))
+    ss_total = ss_regresion + ss_error
+
+    determination = ss_regresion/ss_total
+    return determination
+
 batches = []
 
 batches.append(Batch(108, 95))
@@ -107,6 +118,10 @@ matrix_y = []
 for batch in batches:
     matrix_y.append([batch.efficiency])
 
+y = []
+for batch in batches:
+    y.append(batch.efficiency)
+
 value = 105
 
 #Lineal
@@ -122,7 +137,14 @@ B1_lin = result_lin[1][0]
 
 y_lin = B0_lin + B1_lin*value
 
+"""Correlación y determinación"""
+y_predict = []
+for batche in batches:
+    y_predict.append(B0_lin + B1_lin*batche.size)
+
 print("ECUACION LINEAL:")
+print(f"Coeficiente de correlacion: {math.sqrt(getDetermination(y, y_predict))}")
+print(f"Coeficiente de determinacion: {getDetermination(y, y_predict)}")
 print("y = B0 + B1x")
 print(f"y = {B0_lin} + ({B1_lin})({value})")
 print(f"y = {y_lin}\n")
@@ -141,9 +163,16 @@ B2_cuadratic = result_cuadratic[2][0]
 
 y_cuadratic = B0_cuadratic + B1_cuadratic*value + B2_cuadratic*(value**2)
 
+"""Correlación y determinación"""
+y_predict = []
+for batche in batches:
+    y_predict.append(B0_cuadratic + B1_cuadratic*batche.size + B2_cuadratic*(batche.size**2))
+
 print("ECUACION CUADRATICA:")
+print(f"Coeficiente de correlacion: {math.sqrt(getDetermination(y, y_predict))}")
+print(f"Coeficiente de determinacion: {getDetermination(y, y_predict)}")
 print("y = B0 + B1x + B2x^2")
-print(f"y = {B0_cuadratic} + ({B1_cuadratic})({value}) + ({B1_cuadratic})({value**2})")
+print(f"y = {B0_cuadratic} + ({B1_cuadratic})({value}) + ({B2_cuadratic})({value**2})")
 print(f"y = {y_cuadratic}\n")
 
 #cubica
@@ -161,7 +190,14 @@ B3_cubic = result_cubic[3][0]
 
 y_cubic = B0_cubic + B1_cubic*value + B2_cubic*(value**2) + B3_cubic*(value**3)
 
+"""Correlación y determinación"""
+y_predict = []
+for batche in batches:
+    y_predict.append(B0_cubic + B1_cubic*batche.size + B2_cubic*(batche.size**2) + B3_cubic*(batche.size**3))
+
 print("ECUACION CUBICA:")
+print(f"Coeficiente de correlacion: {math.sqrt(getDetermination(y, y_predict))}")
+print(f"Coeficiente de determinacion: {getDetermination(y, y_predict)}")
 print("y = B0 + B1x + B2x^2 + B3x^3")
-print(f"y = {B0_cubic} + ({B1_cubic})({value}) + ({B2_cubic})({value**2}) + ({B2_cubic})({value**3})")
+print(f"y = {B0_cubic} + ({B1_cubic})({value}) + ({B2_cubic})({value**2}) + ({B3_cubic})({value**3})")
 print(f"y = {y_cubic}\n")
