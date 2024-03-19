@@ -36,6 +36,7 @@ y_rised_to_2 = array_raised_to(sales_y)
 sum_x_rised_to_2 = sum(x_rised_to_2)
 sum_y_rised_to_2 = sum(y_rised_to_2)
 
+#Calcular correlación
 prom_x = sum_adv_x / len(advertising_x)
 prom_y = sum_sales_y / len(sales_y)
 
